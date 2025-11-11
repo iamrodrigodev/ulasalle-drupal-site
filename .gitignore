@@ -14,7 +14,7 @@ web/sites/default/files/**/*
 
 # Composer
 /vendor/
-/composer.lock~
+composer.lock
 /composer.phar
 
 # Cachés y compilaciones
