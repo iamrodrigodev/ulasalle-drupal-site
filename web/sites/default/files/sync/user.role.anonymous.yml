@@ -1,0 +1,22 @@
+uuid: 5fe528fe-b39a-44b0-9126-b46fed0e489f
+langcode: en
+status: true
+dependencies:
+  module:
+    - contact
+    - klaro
+    - media
+    - system
+_core:
+  default_config_hash: j5zLMOdJBqC0bMvSdth5UebkprJB8g_2FXHqhfpJzow
+id: anonymous
+label: 'Anonymous user'
+weight: 0
+is_admin: false
+permissions:
+  - 'access content'
+  - 'access site-wide contact form'
+  - 'access user contact forms'
+  - 'administer contact forms'
+  - 'use klaro'
+  - 'view media'
