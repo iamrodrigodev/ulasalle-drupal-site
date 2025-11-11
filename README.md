@@ -1,48 +1,114 @@
-# Drupal CMS
+# Proyecto Drupal
 
-Drupal CMS is a fast-moving open source product that enables site builders to easily create new Drupal sites and extend them with smart defaults, all using their browser.
+Este proyecto utiliza **DDEV** para gestionar el entorno local de desarrollo y facilitar la exportación de la base de datos y archivos para su despliegue en un servidor (por ejemplo, un VPS).
 
-## Getting started
+## Requisitos previos
 
-If you want to use [DDEV](https://ddev.com) to run Drupal CMS locally, follow these instructions:
+Asegúrate de tener instalado:
 
-1. Install DDEV following the [documentation](https://ddev.com/get-started/)
-2. Open the command line and `cd` to the root directory of this project
-3. Run the following commands:
-```shell
-ddev config --project-type=drupal11 --docroot=web
+- Docker
+- DDEV
+- Git
+
+## Inicializar el proyecto en local
+
+Clonar el repositorio:
+
+```bash
+git clone <URL-del-repositorio>
+cd <nombre-del-proyecto>
+```
+
+Iniciar el proyecto con DDEV:
+
+```bash
 ddev start
-ddev composer install
-ddev composer drupal:recipe-unpack
+```
+
+Acceder al sitio local:
+
+```bash
 ddev launch
 ```
 
-Drupal CMS has the same system requirements as Drupal core, so you can use your preferred setup to run it locally. [See the Drupal User Guide for more information](https://www.drupal.org/docs/user_guide/en/installation-chapter.html) on how to set up Drupal.
+Acceder al contenedor web:
 
-### Installation options
+```bash
+ddev ssh
+```
 
-The Drupal CMS installer offers a list of features preconfigured with smart defaults. You will be able to customize whatever you choose, and add additional features, once you are logged in.
+## Exportar la base de datos (backup)
 
-After the installer is complete, you will land on the dashboard.
+Para exportar la base de datos a un archivo `.sql.gz`:
 
-## Documentation
+```bash
+ddev export-db --file=backup.sql
+```
 
-Coming soon ... [We're working on Drupal CMS specific documentation](https://www.drupal.org/project/drupal_cms/issues/3454527).
+Esto generará un archivo comprimido `backup.sql.gz` en la carpeta principal del proyecto.
 
-In the meantime, learn more about managing a Drupal-based application in the [Drupal User Guide](https://www.drupal.org/docs/user_guide/en/index.html).
+## Exportar archivos (imágenes, uploads, media)
 
-## Contributing
+Los archivos subidos por el sitio están en:
 
-Drupal CMS is developed in the open on [Drupal.org](https://www.drupal.org). We are grateful to the community for reporting bugs and contributing fixes and improvements.
+```
+web/sites/default/files
+```
 
-[Report issues in the queue](https://drupal.org/node/add/project-issue/drupal_cms), providing as much detail as you can. You can also join the #drupal-cms-support channel in the [Drupal Slack community](https://www.drupal.org/slack).
+Para hacer una copia de esos archivos:
 
-Drupal CMS has adopted a [code of conduct](https://www.drupal.org/dcoc) that we expect all participants to adhere to.
+```bash
+zip -r files_backup.zip web/sites/default/files
+```
 
-To contribute to Drupal CMS development, see the [drupal_cms project](https://www.drupal.org/project/drupal_cms).
+## Sincronización de configuración (Config Sync)
 
-## License
+Drupal maneja configuraciones (vistas, bloques, contenido estructural, etc.) que se almacenan en archivos YAML.
 
-Drupal CMS and all derivative works are licensed under the [GNU General Public License, version 2 or later](http://www.gnu.org/licenses/old-licenses/gpl-2.0.html).
+Exportar la configuración:
 
-Learn about the [Drupal trademark and logo policy here](https://www.drupal.com/trademark).
+```bash
+ddev drush cex
+```
+
+Importar la configuración:
+
+```bash
+ddev drush cim
+```
+
+Si recibes el mensaje:
+
+```
+The active configuration is identical to the configuration in the export directory
+```
+
+Significa que no hay cambios pendientes.
+
+## Subir al servidor (VPS)
+
+Cuando vayas a implementar:
+
+1. Subir los archivos del proyecto mediante `git`, `scp` o `rsync`.
+2. Subir la copia de archivos (`files_backup.zip`) a `web/sites/default/files`.
+3. Importar la base de datos en el servidor:
+
+```bash
+gunzip backup.sql.gz
+mysql -u usuario -p nombre_base < backup.sql
+```
+
+4. Ejecutar `drush cim` en el servidor para sincronizar configuración.
+
+---
+
+## Resumen
+
+| Acción | Comando |
+|-------|---------|
+| Iniciar entorno | `ddev start` |
+| Abrir sitio | `ddev launch` |
+| Entrar al contenedor | `ddev ssh` |
+| Exportar DB | `ddev export-db --file=backup.sql` |
+| Exportar configuración | `ddev drush cex` |
+| Importar configuración | `ddev drush cim` |
