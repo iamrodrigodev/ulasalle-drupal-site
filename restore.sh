@@ -15,7 +15,7 @@ if [ ! -f "$FILE" ]; then
   exit 1
 fi
 
-echo "⏳ Restaurando base de datos desde: $FILE ..."
+echo "Restaurando base de datos desde: $FILE ..."
 ddev import-db --src="$FILE"
 ddev drush cr
 
