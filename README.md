@@ -1,4 +1,4 @@
-# Proyecto Drupal 11 con DDEV - Guía paso a paso
+# Proyecto Drupal 11 con DDEV
 
 Este documento explica paso a paso cómo trabajar con un proyecto Drupal 11 en DDEV, cómo respaldar todo (código, configuración, base de datos y archivos) y cómo preparar los archivos necesarios para desplegar en un VPS. Los comandos están explicados en contexto para que quede claro qué hacen y cuándo usarlos.
 
