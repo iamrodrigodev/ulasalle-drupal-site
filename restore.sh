@@ -11,7 +11,7 @@ fi
 FILE="$1"
 
 if [ ! -f "$FILE" ]; then
-  echo "❌ El archivo $FILE no existe."
+  echo "El archivo $FILE no existe."
   exit 1
 fi
 
